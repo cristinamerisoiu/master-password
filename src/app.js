@@ -1,5 +1,5 @@
 const readline = require("readline");
-const { executeCommand } = require("./lib/commands");
+const { executeCommand } = require("./lib/command");
 
 const userArgv = process.argv.slice(2);
 const [action, key, value] = userArgv;
