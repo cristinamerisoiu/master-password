@@ -50,7 +50,9 @@ function set(key, value) {
 }
 
 function unset(key) {
-  console.log("unset", key);
+  const secrets = readSecrets();
+  delete secrets[key];
+  writeSecrets(secrets);
 }
 
 function get(key) {
