@@ -1,6 +1,7 @@
 const readline = require("readline");
 const { executeCommand } = require("./lib/command");
 const crypto = require("crypto");
+const fs = require("fs");
 
 const userArgv = process.argv.slice(2);
 const [action, key, value] = userArgv;
@@ -10,8 +11,7 @@ const rl = readline.createInterface({
   output: process.stdout
 });
 
-const masterPasswordHash =
-  "7bcba7dbe57f39ee52f066ce9616f578$d26ad9ef177ca581a37ac13590487ccf1800f59769346ed1e2547c697e27ff55";
+const masterPasswordHash = fs.readFileSync(".password", "utf-8");
 
 rl.question("What is the master password? ", password => {
   rl.output.write("\n");
