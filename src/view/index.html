@@ -15,9 +15,9 @@
     <div id="showSecret"></div>
 
     <form id="placeSecret">
-      <input type="text" id="setSecret" />
+      <input type="text" id="key" />
       <input type="password" id="value" />
-      <button>Get secret</button>
+      <button>Place secret</button>
     </form>
 
     <script>
@@ -25,10 +25,12 @@
       const submitForm = document.querySelector("#submitForm");
       const showSecret = document.querySelector("#showSecret");
       const getSecretForm = document.querySelector("#placeSecret");
-      const inputKey = document.querySelector("#value");
+      const inputValue = document.querySelector("#value");
+      const inputKey = document.querySelector("#key");
 
       function handleClick(event) {
         event.preventDefault();
+
         const url = `/${secretInput.value}`;
         console.log(url);
         fetch(url)
@@ -38,10 +40,14 @@
           });
       }
 
-      function handleCreate() {
-        const secret = {};
-        secret[inputKey.value] = inputKey.value;
-        console.log(secret);
+      function handleCreate(event) {
+        event.preventDefault();
+
+        const url = `/${inputKey.value}`;
+        fetch(url, {
+          method: "POST",
+          body: inputValue.value
+        });
       }
 
       submitForm.addEventListener("submit", handleClick);

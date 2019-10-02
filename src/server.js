@@ -22,16 +22,22 @@ const server = http.createServer(function(request, response) {
     const path = pathname.slice(1);
     if (request.method === "GET") {
       const secret = get("abc", path);
-      response.write(secret);
+      response.end(secret);
     } else if (request.method === "POST") {
-      set("abc", path, Date.now().toString());
-      response.write(`Set ${path} value`);
+      let body = "";
+      request.on("data", function(data) {
+        body += data;
+        console.log("Partial body" + body);
+      });
+      request.on("end", function() {
+        console.log("Body: " + body);
+        set("abc", path, body);
+        response.end(`Set ${path}`);
+      });
     }
   } catch (error) {
-    response.write("Can not read secret");
+    response.end("Can not read secret");
   }
-
-  response.end();
 });
 
 server.listen(3000, () => {
