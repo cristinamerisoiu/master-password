@@ -8,5 +8,44 @@
   </head>
   <body>
     <h1>Welcome to the master password</h1>
+    <form id="submitForm">
+      <input type="text" id="secretInput" placeholder="Add secret input" />
+      <button>Get secret</button>
+    </form>
+    <div id="showSecret"></div>
+
+    <form id="placeSecret">
+      <input type="text" id="setSecret" />
+      <input type="password" id="value" />
+      <button>Get secret</button>
+    </form>
+
+    <script>
+      const secretInput = document.querySelector("#secretInput");
+      const submitForm = document.querySelector("#submitForm");
+      const showSecret = document.querySelector("#showSecret");
+      const getSecretForm = document.querySelector("#placeSecret");
+      const inputKey = document.querySelector("#value");
+
+      function handleClick(event) {
+        event.preventDefault();
+        const url = `/${secretInput.value}`;
+        console.log(url);
+        fetch(url)
+          .then(response => response.text())
+          .then(secret => {
+            showSecret.innerHTML = secret;
+          });
+      }
+
+      function handleCreate() {
+        const secret = {};
+        secret[inputKey.value] = inputKey.value;
+        console.log(secret);
+      }
+
+      submitForm.addEventListener("submit", handleClick);
+      placeSecret.addEventListener("submit", handleCreate);
+    </script>
   </body>
 </html>
