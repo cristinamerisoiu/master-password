@@ -72,7 +72,7 @@
       // }
       function deleteClick(event) {
         event.preventDefault();
-        const url = `/${deleteSecret.key}`;
+        const url = `/${deleteSecret.value}`;
         fetch(url, {
           method: "DELETE"
         });

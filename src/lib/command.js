@@ -32,7 +32,7 @@ async function get(password, key) {
   const secret = await secretsCollection.findOne({ key });
 
   const cryptoKey = crypto.createDecipher("aes-128-cbc", password);
-  let decryptedSecret = cryptoKey.update(secret, "hex", "utf8");
+  let decryptedSecret = cryptoKey.update(secret.value, "hex", "utf8");
   decryptedSecret += cryptoKey.final("utf8");
 
   return decryptedSecret;
