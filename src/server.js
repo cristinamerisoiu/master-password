@@ -1,6 +1,7 @@
 const http = require("http");
 const url = require("url");
 const fs = require("fs");
+const { initDatabase } = require("./lib/mongoDemo");
 
 const { get, set } = require("./lib/command");
 
@@ -40,6 +41,9 @@ const server = http.createServer(function(request, response) {
   }
 });
 
-server.listen(3000, () => {
-  console.log("Server listens on http://localhost:3000");
+initDatabase().then(() => {
+  console.log("Database connected");
+  server.listen(8080, () => {
+    console.log("Server listens on http://localhost:3000");
+  });
 });
