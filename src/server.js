@@ -3,7 +3,7 @@ const url = require("url");
 const fs = require("fs");
 const { initDatabase } = require("./lib/mongoDemo");
 
-const { get, set } = require("./lib/command");
+const { get, set, unset } = require("./lib/command");
 
 const server = http.createServer(async function(request, response) {
   const { pathname } = url.parse(request.url);
@@ -22,7 +22,7 @@ const server = http.createServer(async function(request, response) {
   try {
     const path = pathname.slice(1);
     if (request.method === "GET") {
-      const secret = get("abc", path);
+      const secret = await get("abc", path);
       response.end(secret);
     } else if (request.method === "POST") {
       let body = "";
@@ -30,11 +30,14 @@ const server = http.createServer(async function(request, response) {
         body += data;
         console.log("Partial body" + body);
       });
-      request.on("end", function() {
+      request.on("end", async function() {
         console.log("Body: " + body);
-        set("abc", path, body);
+        await set("abc", path, body);
         response.end(`Set ${path}`);
       });
+    } else if (request.method === "DELETE") {
+      await unset("abc", path);
+      response.end(`Delete ${path}`);
     }
   } catch (error) {
     response.end("Can not read secret");

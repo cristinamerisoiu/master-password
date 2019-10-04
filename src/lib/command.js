@@ -10,7 +10,11 @@ async function set(password, key, value) {
   let encryptedValue = cryptoKey.update(value, "utf8", "hex");
   encryptedValue += cryptoKey.final("hex");
 
-  await secretsCollection.insertOne({ key, value: encryptedValue });
+  await secretsCollection.updateOne(
+    { key },
+    { $set: { value: encryptedValue } },
+    { upsert: true }
+  );
 }
 
 async function unset(password, key) {

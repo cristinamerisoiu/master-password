@@ -20,6 +20,16 @@
       <button>Place secret</button>
     </form>
 
+    <form id="unsetForm">
+      <input
+        type="text"
+        id="deleteSecret"
+        placeholder="Delete Secret"
+        autocomplete="off"
+      />
+      <button>Delete secret</button>
+    </form>
+
     <script>
       const secretInput = document.querySelector("#secretInput");
       const submitForm = document.querySelector("#submitForm");
@@ -27,6 +37,8 @@
       const getSecretForm = document.querySelector("#placeSecret");
       const inputValue = document.querySelector("#value");
       const inputKey = document.querySelector("#key");
+      const unsetForm = document.querySelector("#unsetForm");
+      const deleteSecret = document.querySelector("#deleteSecret");
 
       function handleClick(event) {
         event.preventDefault();
@@ -50,8 +62,25 @@
         });
       }
 
+      // function deleteClick(event) {
+      //   event.preventDefault();
+
+      //   const url = `/${deleteSecret.key}`;
+      //   fetch(url, {
+      //     method: "DELETE"
+      //   });
+      // }
+      function deleteClick(event) {
+        event.preventDefault();
+        const url = `/${deleteSecret.key}`;
+        fetch(url, {
+          method: "DELETE"
+        });
+      }
+
       submitForm.addEventListener("submit", handleClick);
       placeSecret.addEventListener("submit", handleCreate);
+      unsetForm.addEventListener("submit", deleteClick);
     </script>
   </body>
 </html>
