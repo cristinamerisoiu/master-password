@@ -1,5 +1,6 @@
 const { MongoClient } = require("mongodb");
 
+let db = null;
 async function initDatabase() {
   // Connection URL
   const url = "mongodb://localhost:27017/master-password";
@@ -14,11 +15,15 @@ async function initDatabase() {
   // Use connect method to connect to the Server
   await client.connect();
 
-  const db = client.db(dbName);
-  const secretsCollection = await db.createCollection("secrets");
-  console.log("Collection secrets created");
+  db = client.db(dbName);
+}
 
-  client.close();
+async function getCollection(collectionName) {
+  if (!db) {
+    await initDatabase();
+  }
+  return db.collection(collectionName);
 }
 
 exports.initDatabase = initDatabase;
+exports.getCollection = getCollection;

@@ -5,8 +5,9 @@ const { initDatabase } = require("./lib/mongoDemo");
 
 const { get, set } = require("./lib/command");
 
-const server = http.createServer(function(request, response) {
+const server = http.createServer(async function(request, response) {
   const { pathname } = url.parse(request.url);
+  console.log(request.url, request.method);
 
   if (pathname === "/favicon.ico") {
     response.writeHead(404);
@@ -18,7 +19,6 @@ const server = http.createServer(function(request, response) {
     return response.end(content);
   }
 
-  console.log(pathname, request.method);
   try {
     const path = pathname.slice(1);
     if (request.method === "GET") {
@@ -43,7 +43,8 @@ const server = http.createServer(function(request, response) {
 
 initDatabase().then(() => {
   console.log("Database connected");
-  server.listen(8080, () => {
+
+  server.listen(3000, () => {
     console.log("Server listens on http://localhost:3000");
   });
 });

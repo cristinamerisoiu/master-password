@@ -1,25 +1,31 @@
-const { readSecrets, writeSecrets } = require("./secrets");
 const crypto = require("crypto");
+const { getCollection } = require("./mongoDemo");
 
-function set(password, key, value) {
+async function set(password, key, value) {
+  const secretsCollection = await getCollection("secrets");
+
+  // Update or Insert secret
+
   const cryptoKey = crypto.createCipher("aes-128-cbc", password);
   let encryptedValue = cryptoKey.update(value, "utf8", "hex");
   encryptedValue += cryptoKey.final("hex");
 
-  const secrets = readSecrets();
-  secrets[key] = encryptedValue;
-  writeSecrets(secrets);
+  await secretsCollection.insertOne({ key, value: encryptedValue });
 }
 
-function unset(password, key) {
-  const secrets = readSecrets();
-  delete secrets[key];
-  writeSecrets(secrets);
+async function unset(password, key) {
+  const secretsCollection = await getCollection("secrets");
+  //Delete secrets
+
+  if (!get(password, key)) {
+    throw new Error("No access to secrets!");
+  }
+  await secretsCollection.deleteOne({ key });
 }
 
-function get(password, key) {
-  const secrets = readSecrets();
-  const secret = secrets[key];
+async function get(password, key) {
+  const secretsCollection = await getCollection("secrets");
+  const secret = await secretsCollection.findOne({ key });
 
   const cryptoKey = crypto.createDecipher("aes-128-cbc", password);
   let decryptedSecret = cryptoKey.update(secret, "hex", "utf8");
